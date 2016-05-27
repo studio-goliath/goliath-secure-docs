@@ -1,7 +1,7 @@
 === Goliath secure docs ===
 Contributors: arnaudban, studio-goliath
 Tags: documents
-Requires at least: 4.0
+Requires at least: 4.4
 Tested up to: 4.5
 Stable tag: trunk
 License: GPLv2 or later
