@@ -13,7 +13,8 @@ class Goliath_Secure_Documents_Test extends WP_UnitTestCase {
 
 	function test_goliath_secure_documents_folder_existe()
 	{
-
+		goliath_secure_documents_activate();
+		
 		$secure_doc_folder_path = goliath_secure_documents_get_docs_folder();
 
 		$this->assertTrue( is_dir( $secure_doc_folder_path ) );
