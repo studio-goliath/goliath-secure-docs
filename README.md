@@ -1,4 +1,7 @@
 # Goliath secure docs #
+
+Travis Build Status : [![Build Status](https://travis-ci.org/studio-goliath/goliath-secure-docs.svg?branch=master)](https://travis-ci.org/studio-goliath/goliath-secure-docs)
+
 **Contributors:** arnaudban, studio-goliath  
 **Tags:** documents  
 **Requires at least:** 4.0  
