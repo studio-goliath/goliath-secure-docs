@@ -1,5 +1,10 @@
 <?php
+/**
+ * Show secure doc
+ *
+ */
 
+global $wpdb;
 
 // check if user is logged in
 if ( !is_user_logged_in() ) {
@@ -17,11 +22,17 @@ if( is_file( $doc_path ) ){
 
     $secure_doc = file_get_contents( $doc_path );
 
-
-    $finfo = finfo_open(FILEINFO_MIME_TYPE);
-    $file_mime_type = finfo_file($finfo, $secure_doc);
+    $file_mime_type = $wpdb->get_var(
+        "
+        SELECT meta_value 
+        FROM $wpdb->postmeta 
+        WHERE  meta_key = '_secure_doc_mime_type'
+        AND post_id = ( SELECT post_id FROM $wpdb->postmeta WHERE meta_value = '$secure_doc_name' )
+        "
+    );
 
     header ("Content-Type: {$file_mime_type}");
+    header('Content-Disposition: inline; filename="'. $secure_doc_name .'"');
 
     echo $secure_doc;
 
