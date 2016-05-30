@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Goliath secure docs 0.1-alpha\n"
 "Report-Msgid-Bugs-To: "
 "https://wordpress.org/support/plugin/goliath-secure-docs\n"
-"POT-Creation-Date: 2016-05-25 13:53:18+00:00\n"
+"POT-Creation-Date: 2016-05-27 07:59:15+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -25,12 +25,118 @@ msgstr ""
 "X-Poedit-Bookmarks: \n"
 "X-Textdomain-Support: yes\n"
 
-#. Plugin Name of the plugin/theme
-msgid "Goliath secure docs"
+#: post-types/secure-document.php:6
+msgid "Secure documents"
 msgstr ""
 
-#. Plugin URI of the plugin/theme
-msgid "PLUGIN SITE HERE"
+#: post-types/secure-document.php:7
+msgid "Secure document"
+msgstr ""
+
+#: post-types/secure-document.php:8
+msgid "All Secure documents"
+msgstr ""
+
+#: post-types/secure-document.php:9
+msgid "New Secure document"
+msgstr ""
+
+#: post-types/secure-document.php:10
+msgid "Add New"
+msgstr ""
+
+#: post-types/secure-document.php:11
+msgid "Add New Secure document"
+msgstr ""
+
+#: post-types/secure-document.php:12
+msgid "Edit Secure document"
+msgstr ""
+
+#: post-types/secure-document.php:13
+msgid "View Secure document"
+msgstr ""
+
+#: post-types/secure-document.php:14
+msgid "Search Secure documents"
+msgstr ""
+
+#: post-types/secure-document.php:15
+msgid "No Secure documents found"
+msgstr ""
+
+#: post-types/secure-document.php:16
+msgid "No Secure documents found in trash"
+msgstr ""
+
+#: post-types/secure-document.php:17
+msgid "Parent Secure document"
+msgstr ""
+
+#: post-types/secure-document.php:18
+msgid "Secure docs"
+msgstr ""
+
+#: post-types/secure-document.php:47
+msgid ""
+"Secure document updated. <a target=\"_blank\" href=\"%s\">View Secure "
+"document</a>"
+msgstr ""
+
+#: post-types/secure-document.php:48
+msgid "Custom field updated."
+msgstr ""
+
+#: post-types/secure-document.php:49
+msgid "Custom field deleted."
+msgstr ""
+
+#: post-types/secure-document.php:50
+msgid "Secure document updated."
+msgstr ""
+
+#: post-types/secure-document.php:52
+#. translators: %s: date and time of the revision
+msgid "Secure document restored to revision from %s"
+msgstr ""
+
+#: post-types/secure-document.php:53
+msgid "Secure document published. <a href=\"%s\">View Secure document</a>"
+msgstr ""
+
+#: post-types/secure-document.php:54
+msgid "Secure document saved."
+msgstr ""
+
+#: post-types/secure-document.php:55
+msgid ""
+"Secure document submitted. <a target=\"_blank\" href=\"%s\">Preview Secure "
+"document</a>"
+msgstr ""
+
+#: post-types/secure-document.php:56
+msgid ""
+"Secure document scheduled for: <strong>%1$s</strong>. <a target=\"_blank\" "
+"href=\"%2$s\">Preview Secure document</a>"
+msgstr ""
+
+#: post-types/secure-document.php:58
+#. translators: Publish box date format, see http:php.net/date
+msgid "M j, Y @ G:i"
+msgstr ""
+
+#: post-types/secure-document.php:59
+msgid ""
+"Secure document draft updated. <a target=\"_blank\" href=\"%s\">Preview "
+"Secure document</a>"
+msgstr ""
+
+#: post-types/secure-document.php:69
+msgid "Secure file"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "Goliath secure docs"
 msgstr ""
 
 #. Description of the plugin/theme

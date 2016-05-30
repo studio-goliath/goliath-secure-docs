@@ -1,6 +1,19 @@
 <?php
+/**
+ * "secure-document" custom post type
+ *
+ */
 
-function secure_document_init() {
+
+add_action( 'init', 'secure_document_init' );
+
+/**
+ *
+ * "secure-document" custom post type registration
+ *
+ */
+function secure_document_init()
+{
 
 	$secure_doc_label = apply_filters( 'goliath-secure-docs-cpt-secure-document-label', array(
 		'name'                => __( 'Secure documents', 'goliath-secure-docs' ),
@@ -15,28 +28,30 @@ function secure_document_init() {
 		'not_found'           => __( 'No Secure documents found', 'goliath-secure-docs' ),
 		'not_found_in_trash'  => __( 'No Secure documents found in trash', 'goliath-secure-docs' ),
 		'parent_item_colon'   => __( 'Parent Secure document', 'goliath-secure-docs' ),
-		'menu_name'           => __( 'Secure documents', 'goliath-secure-docs' ),
+		'menu_name'           => __( 'Secure docs', 'goliath-secure-docs' ),
 	) );
 
 	$secure_doc_args = apply_filters( 'goliath-secure-docs-cpt-secure-document-params', array(
-		'labels'            => $secure_doc_label,
-		'public'            => false,
-		'hierarchical'      => false,
-		'show_ui'           => true,
-		'show_in_nav_menus' => false,
-		'supports'          => array( 'title', 'editor' ),
-		'has_archive'       => false,
-		'rewrite'           => false,
-		'query_var'         => false,
-		'menu_icon'         => 'dashicons-lock',
+		'labels'                => $secure_doc_label,
+		'public'                => false,
+		'hierarchical'          => false,
+		'show_ui'               => true,
+		'show_in_nav_menus'     => false,
+		'supports'              => array( 'title', 'editor' ),
+		'has_archive'           => false,
+		'rewrite'               => false,
+		'query_var'             => false,
+		'register_meta_box_cb'  => 'secure_document_register_file_meta_box',
+		'menu_icon'             => 'dashicons-lock',
 	) );
 
 	register_post_type( 'secure-document', $secure_doc_args );
 
 }
-add_action( 'init', 'secure_document_init' );
 
-function secure_document_updated_messages( $messages ) {
+
+function secure_document_updated_messages( $messages )
+{
 	global $post;
 
 	$permalink = get_permalink( $post );
@@ -54,10 +69,109 @@ function secure_document_updated_messages( $messages ) {
 		8 => sprintf( __('Secure document submitted. <a target="_blank" href="%s">Preview Secure document</a>', 'goliath-secure-docs'), esc_url( add_query_arg( 'preview', 'true', $permalink ) ) ),
 		9 => sprintf( __('Secure document scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview Secure document</a>', 'goliath-secure-docs'),
 		// translators: Publish box date format, see http://php.net/date
-		date_i18n( __( 'M j, Y @ G:i' ), strtotime( $post->post_date ) ), esc_url( $permalink ) ),
+		date_i18n( __( 'M j, Y @ G:i', 'goliath-secure-docs' ), strtotime( $post->post_date ) ), esc_url( $permalink ) ),
 		10 => sprintf( __('Secure document draft updated. <a target="_blank" href="%s">Preview Secure document</a>', 'goliath-secure-docs'), esc_url( add_query_arg( 'preview', 'true', $permalink ) ) ),
 	);
 
 	return $messages;
 }
 add_filter( 'post_updated_messages', 'secure_document_updated_messages' );
+
+
+/**
+ * Register the upload file metabox
+ *
+ */
+function secure_document_register_file_meta_box()
+{
+	add_meta_box( 'secure_document_file_meta_box', __( 'Secure file', 'goliath-secure-docs' ) , 'secure_document_file_meta_box_content', 'secure-document' );
+}
+
+
+/**
+ * Display the upload file metabox
+ *
+ */
+function secure_document_file_meta_box_content( $post )
+{
+	// Display current file
+	$secure_doc_path_meta = get_post_meta( $post->ID, '_secure_doc_path', true );
+	$secure_doc_mime_meta = get_post_meta( $post->ID, '_secure_doc_mime_type', true );
+
+	if( 'application/zip' == $secure_doc_mime_meta ){
+		$dashicons = 'dashicons-media-archive';
+
+	} else if ( strpos( $secure_doc_mime_meta, 'text') === 0 ||
+	            strpos( $secure_doc_mime_meta, 'application' ) === 0 ){
+		$dashicons = 'dashicons-media-document';
+
+	} else if ( strpos( $secure_doc_mime_meta, 'image') === 0 ){
+		$dashicons = 'dashicons-media-interactive';
+
+	} else {
+		$dashicons = 'dashicons-media-default';
+
+	}
+
+	wp_nonce_field( 'secure_document_nonce', 'secure_document_nonce_name');
+	?>
+	<p class="dashicons-before <?php echo $dashicons; ?>">
+		<?php echo $secure_doc_path_meta; ?>
+	</p>
+
+	<input type="file" name="goliath_secure_doc_file" />
+	<?php
+}
+
+
+add_action( 'save_post_secure-document', 'goliath_secure_documents_save_file_and_meta');
+
+function goliath_secure_documents_save_file_and_meta( $post_id )
+{
+	if( isset( $_FILES['goliath_secure_doc_file'] ) && check_admin_referer( 'secure_document_nonce', 'secure_document_nonce_name' ) ){
+
+		$secure_doc_file = $_FILES['goliath_secure_doc_file'];
+
+		// Check if wee have a file and if it is send via HTTP POST
+		if (is_uploaded_file( $secure_doc_file['tmp_name'] ) ) {
+
+			// The file new path
+			$secure_doc_path = goliath_secure_documents_get_docs_folder() . '/' . $secure_doc_file['name'];
+
+			// check if there is no file with the same name already
+			if( is_file( $secure_doc_path ) ){
+
+				// get extension
+				preg_match('/\.[^\.]+$/i', $secure_doc_path, $ext) ;
+
+				// rename the file - NAME w/out .ext+time()+.ext
+				$secure_doc_path = substr( $secure_doc_path,0 ,-(strlen($ext[0]))).'_'.time().$ext[0];
+			}
+
+			// Save the file in the write place
+			$file_is_move = move_uploaded_file( $secure_doc_file['tmp_name'], $secure_doc_path );
+
+			// Update post meta
+			if( $file_is_move ){
+
+				update_post_meta( $post_id, '_secure_doc_path', basename( $secure_doc_path ) );
+				update_post_meta( $post_id, '_secure_doc_mime_type', $secure_doc_file['type'] );
+			}
+		}
+	}
+}
+
+
+add_action( 'post_edit_form_tag' , 'goliath_secure_doc_post_edit_form_tag' );
+
+/**
+ *
+ * @param WP_Post $post
+ */
+function goliath_secure_doc_post_edit_form_tag( $post )
+{
+	if( 'secure-document' == $post->post_type ){
+
+		echo ' enctype="multipart/form-data"';
+	}
+}
