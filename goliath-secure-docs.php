@@ -19,7 +19,7 @@ require_once plugin_dir_path( __FILE__ ) . 'post-types/secure-document.php';
 
 
 /**
- * Fonction call on plugin activation
+ * Function call on plugin activation
  *
  *  - create secure document folder
  */
@@ -42,4 +42,43 @@ function goliath_secure_documents_get_docs_folder(){
 
     return $secure_doc_folder_path . '/goliath-secure-documents';
 
+}
+
+
+add_action('init', 'goliath_secure_docs_rewrite_rules' );
+
+/**
+ * Add new rewrite rules for the secure documents
+ */
+function goliath_secure_docs_rewrite_rules() {
+
+    add_rewrite_rule('^secure-doc/(.+?)/?$', 'index.php?secure_doc_name=$matches[1]', 'top');
+
+}
+
+
+add_filter('query_vars', 'add_goliath_secure_docs_query_var' );
+
+function add_goliath_secure_docs_query_var($public_query_vars) {
+    $public_query_vars[] = 'secure_doc_name';
+    return $public_query_vars;
+}
+
+
+add_filter( 'template_include', 'goliath_secure_docs_redirect_template', 99 );
+
+function goliath_secure_docs_redirect_template( $template ) {
+
+    $secure_doc_name = get_query_var( 'secure_doc_name' );
+
+    if ( $secure_doc_name ) {
+
+        $new_template = plugin_dir_path( __FILE__ ) . 'secure-document-display.php';
+
+        return $new_template ;
+
+
+    }
+
+    return $template;
 }

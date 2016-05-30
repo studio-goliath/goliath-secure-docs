@@ -116,7 +116,7 @@ function secure_document_file_meta_box_content( $post )
 	wp_nonce_field( 'secure_document_nonce', 'secure_document_nonce_name');
 	?>
 	<p class="dashicons-before <?php echo $dashicons; ?>">
-		<?php echo $secure_doc_path_meta; ?>
+		<a href="<?php echo site_url( '/secure-doc/' . $secure_doc_path_meta ); ?>"><?php echo $secure_doc_path_meta; ?></a>
 	</p>
 
 	<input type="file" name="goliath_secure_doc_file" />
