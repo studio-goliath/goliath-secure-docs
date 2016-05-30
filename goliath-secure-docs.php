@@ -35,13 +35,40 @@ function goliath_secure_documents_activate() {
 register_activation_hook( __FILE__, 'goliath_secure_documents_activate' );
 
 
-
+/**
+ * function to get the secure documents folder
+ *
+ * @return string
+ */
 function goliath_secure_documents_get_docs_folder(){
 
     $secure_doc_folder_path = dirname( ABSPATH );
 
     return $secure_doc_folder_path . '/goliath-secure-documents';
 
+}
+
+
+/**
+ * function to get the slug of the secure documents url
+ *
+ * @return string
+ */
+function goliath_secure_documents_get_doc_slug()
+{
+
+    return apply_filters( 'goliath_secure_documents_get_doc_slug', 'secure-doc');
+}
+
+
+/**
+ * @param $secure_file_name
+ *
+ * @return string
+ */
+function goliath_secure_documents_get_doc_url( $secure_file_name )
+{
+    return site_url( "/secure-doc/{$secure_file_name}" );
 }
 
 
@@ -52,7 +79,9 @@ add_action('init', 'goliath_secure_docs_rewrite_rules' );
  */
 function goliath_secure_docs_rewrite_rules() {
 
-    add_rewrite_rule('^secure-doc/(.+?)/?$', 'index.php?secure_doc_name=$matches[1]', 'top');
+    $secure_doc_slug = goliath_secure_documents_get_doc_slug();
+
+    add_rewrite_rule("^{$secure_doc_slug}/(.+?)/?$", 'index.php?secure_doc_name=$matches[1]', 'top');
 
 }
 

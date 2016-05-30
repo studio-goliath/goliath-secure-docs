@@ -116,7 +116,7 @@ function secure_document_file_meta_box_content( $post )
 	wp_nonce_field( 'secure_document_nonce', 'secure_document_nonce_name');
 	?>
 	<p class="dashicons-before <?php echo $dashicons; ?>">
-		<a href="<?php echo site_url( '/secure-doc/' . $secure_doc_path_meta ); ?>"><?php echo $secure_doc_path_meta; ?></a>
+		<a href="<?php echo goliath_secure_documents_get_doc_url( $secure_doc_path_meta ); ?>"><?php echo $secure_doc_path_meta; ?></a>
 	</p>
 
 	<input type="file" name="goliath_secure_doc_file" />
@@ -174,4 +174,38 @@ function goliath_secure_doc_post_edit_form_tag( $post )
 
 		echo ' enctype="multipart/form-data"';
 	}
+}
+
+
+
+add_filter('manage_secure-document_posts_columns', 'goliath_secure_doc_column');
+
+/**
+ * Add the "File" column on the "Secure documents" admin page
+ *
+ * @param array $defaults
+ *
+ * @return array
+ */
+function goliath_secure_doc_column( $defaults ) {
+	$defaults['secure_doc_link']  = 'File';
+	return $defaults;
+}
+
+
+add_action( 'manage_secure-document_posts_custom_column', 'goliath_secure_doc_column_content', 10, 2 );
+
+/**
+ * Dis play the link to secure documents in the "File" column on the "Secure documents" admin page
+ *
+ * @param $column_name
+ * @param $post_id
+ */
+function goliath_secure_doc_column_content( $column_name, $post_id ) {
+
+	if ($column_name == 'secure_doc_link') {
+		$secure_doc_path_meta = get_post_meta( $post_id, '_secure_doc_path', true );
+		echo '<a href="'. goliath_secure_documents_get_doc_url( $secure_doc_path_meta ) .'">'. $secure_doc_path_meta . '</a>';
+	}
+
 }
