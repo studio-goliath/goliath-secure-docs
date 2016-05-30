@@ -177,7 +177,6 @@ function goliath_secure_doc_post_edit_form_tag( $post )
 }
 
 
-
 add_filter('manage_secure-document_posts_columns', 'goliath_secure_doc_column');
 
 /**

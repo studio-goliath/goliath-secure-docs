@@ -68,7 +68,7 @@ function goliath_secure_documents_get_doc_slug()
  */
 function goliath_secure_documents_get_doc_url( $secure_file_name )
 {
-    return site_url( "/secure-doc/{$secure_file_name}" );
+    return site_url( goliath_secure_documents_get_doc_slug() . '/' . $secure_file_name );
 }
 
 
