@@ -98,6 +98,10 @@ function secure_document_file_meta_box_content( $post )
 	$secure_doc_path_meta = get_post_meta( $post->ID, '_secure_doc_path', true );
 	$secure_doc_mime_meta = get_post_meta( $post->ID, '_secure_doc_mime_type', true );
 
+	$required_option = get_option( '_secure_doc_field_required', true );
+
+	$required_attribut = $required_option ? 'required="required"' : '';
+
 	if( 'application/zip' == $secure_doc_mime_meta ){
 		$dashicons = 'dashicons-media-archive';
 
@@ -119,7 +123,7 @@ function secure_document_file_meta_box_content( $post )
 		<a href="<?php echo goliath_secure_documents_get_doc_url( $secure_doc_path_meta ); ?>"><?php echo $secure_doc_path_meta; ?></a>
 	</p>
 
-	<input type="file" name="goliath_secure_doc_file" />
+	<input type="file" name="goliath_secure_doc_file" <?php echo $required_attribut ?>/>
 	<?php
 }
 
