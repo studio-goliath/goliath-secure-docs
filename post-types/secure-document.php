@@ -100,7 +100,7 @@ function secure_document_file_meta_box_content( $post )
 
 	$required_option = get_option( '_secure_doc_field_required', true );
 
-	$required_attribut = $required_option ? 'required="required"' : '';
+	$required_attribut = $required_option && ! $secure_doc_path_meta ? 'required="required"' : '';
 
 	if( 'application/zip' == $secure_doc_mime_meta ){
 		$dashicons = 'dashicons-media-archive';
