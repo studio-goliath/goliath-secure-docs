@@ -125,6 +125,8 @@ function secure_document_file_meta_box_content( $post )
 
 	<input type="file" name="goliath_secure_doc_file" <?php echo $required_attribut ?>/>
 	<?php
+
+    do_action( 'secure_document_after_metabox_content', $post);
 }
 
 
