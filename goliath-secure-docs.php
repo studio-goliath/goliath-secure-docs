@@ -28,7 +28,7 @@ function goliath_secure_documents_activate() {
     $secure_doc_folder_path = goliath_secure_documents_get_docs_folder();
 
     if( ! is_dir( $secure_doc_folder_path ) ){
-        mkdir( $secure_doc_folder_path, 0600 );
+        mkdir( $secure_doc_folder_path, 0644 );
     }
 
 }
