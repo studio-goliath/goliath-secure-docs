@@ -16,11 +16,13 @@ if ( !is_user_logged_in() ) {
 
 $secure_doc_name = get_query_var( 'secure_doc_name' );
 
-$doc_path = goliath_secure_documents_get_docs_folder() . '/' . $secure_doc_name;
+$doc_path = urldecode( goliath_secure_documents_get_docs_folder() . '/' . $secure_doc_name );
+$real_doc_path = realpath( $doc_path );
 
-if( is_file( $doc_path ) ){
+$is_file = is_file( $real_doc_path );
+if( $is_file ){
 
-    $secure_doc = file_get_contents( $doc_path );
+    $secure_doc = file_get_contents( $real_doc_path );
 
     $file_mime_type = $wpdb->get_var(
         "
