@@ -14,9 +14,9 @@ if ( !is_user_logged_in() ) {
 }
 
 
-$secure_doc_name = get_query_var( 'secure_doc_name' );
+$secure_doc_name = urldecode( mb_convert_encoding( get_query_var( 'secure_doc_name' ), 'HTML-ENTITIES', "UTF-8") );
 
-$doc_path = urldecode( goliath_secure_documents_get_docs_folder() . '/' . $secure_doc_name );
+$doc_path = goliath_secure_documents_get_docs_folder() . '/' . $secure_doc_name;
 $real_doc_path = realpath( $doc_path );
 
 $is_file = is_file( $real_doc_path );
